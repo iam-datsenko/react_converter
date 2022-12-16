@@ -5,24 +5,28 @@ import "./Main.scss";
 export const Main = () => {
   const [fromCurrency, setFromCurrency] = useState("UAH");
   const [toCurrency, setToCurrency] = useState("USD");
-  const [fromPrice, setFromPrice] = useState(0);
-  const [toPrice, setToPrice] = useState(0);
+  const [fromPrice, setFromPrice] = useState('');
+  const [toPrice, setToPrice] = useState('');
   const [rates, setRates] = useState({});
 
-  useEffect(() => {
+  const getRates = () => {
     const myHeaders = new Headers();
     myHeaders.append("apikey", "sCdU3ESBNQ3QAjtXKbV4pm701CI4Xu8S");
-
+  
     const requestOptions = {
       method: 'GET',
       redirect: 'follow',
       headers: myHeaders
     };
-
+  
     fetch("https://api.apilayer.com/fixer/latest?symbols=USD%2C%20EUR%2C%20UAH&base=UAH", requestOptions)
       .then(response => response.json())
       .then(result => setRates(result.rates))
       .catch(error => console.log('error', error));
+  }
+
+  useEffect(() => {
+    getRates();
   }, []);
 
   const onChangeFromPrice = useCallback(
